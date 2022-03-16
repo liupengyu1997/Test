@@ -10,5 +10,6 @@ public class First {
         set.add(1);
         System.out.println(set);
         System.out.println(1);
+        System.out.println(2);
     }
 }
