@@ -9,5 +9,6 @@ public class First {
         set.add(3);
         set.add(1);
         System.out.println(set);
+        System.out.println(1);
     }
 }
