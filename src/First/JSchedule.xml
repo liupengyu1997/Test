@@ -1,0 +1,133 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<!--<mapper namespace="com.jd.jimdb.model.repository.JScheduleRepository">-->
+<!--    <resultMap id="ApplyResult" type="JApply">-->
+<!--        <id column="id" property="id" jdbcType="BIGINT"/>-->
+<!--        <id column="business_id" property="businessId" jdbcType="VARCHAR"/>-->
+<!--        <result column="type" property="type" jdbcType="VARCHAR"/>-->
+<!--        <result column="payload" property="payload" jdbcType="VARCHAR"/>-->
+<!--        <result column="auditor" property="auditor" jdbcType="VARCHAR"/>-->
+<!--        <result column="description" property="description" jdbcType="VARCHAR"/>-->
+<!--        <result column="status" property="status" jdbcType="TINYINT"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="create_by" property="createBy.id" jdbcType="BIGINT"/>-->
+<!--        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="update_by" property="updateBy.id" jdbcType="BIGINT"/>-->
+<!--        <result column="audit_type" property="audit_type" jdbcType="VARCHAR"/>-->
+<!--        <result column="snapshot" property="snapshot" jdbcType="VARCHAR"/>-->
+<!--        <result column="exec_time" property="exec_time" jdbcType="VARCHAR"/>-->
+<!--        <result column="interval" property="interval" jdbcType="BIGINT"/>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="OpbotScheduleResult" type="com.jd.jimdb.model.model.OpbotSchedule">-->
+<!--        <id column="apply_id" property="applyId" jdbcType="BIGINT"/>-->
+<!--        <id column="apply_id" property="applyId" jdbcType="BIGINT"/>-->
+<!--        <result column="type" property="type" jdbcType="VARCHAR"/>-->
+<!--        <result column="trigger_id" property="triggerId" jdbcType="BIGINT" />-->
+<!--        <result column="fire_time" property="fireTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="success_count" property="successCount" jdbcType="INTEGER"/>-->
+<!--        <result column="fail_count" property="failCount" jdbcType="INTEGER"/>-->
+<!--        <result column="wait_count" property="waitCount" jdbcType="INTEGER"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="create_by" property="createBy" jdbcType="BIGINT"/>-->
+<!--        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="update_by" property="updateBy" jdbcType="BIGINT"/>-->
+<!--        <result column="businessId" property="businessId" jdbcType="VARCHAR"/>-->
+<!--        <result column="applyType" property="applyType" jdbcType="VARCHAR"/>-->
+<!--        <result column="status" property="status" jdbcType="TINYINT"/>-->
+<!--        <result column="shardId" property="shardId" jdbcType="BIGINT"/>-->
+<!--        <result column="payload" property="payload" jdbcType="VARCHAR"/>-->
+<!--    </resultMap>-->
+<!--    <sql id="selectSchedule">-->
+<!--        SELECT-->
+<!--            id,-->
+<!--            apply_id AS applyId,-->
+<!--            `type`,-->
+<!--            trigger_id AS triggerId,-->
+<!--            fire_time AS fireTime,-->
+<!--            success_count As successCount,-->
+<!--            fail_count As failCount,-->
+<!--            wait_count AS waitCount,-->
+<!--            create_time AS createTime,-->
+<!--            create_by AS `createBy.id`,-->
+<!--            update_time AS updateTime,-->
+<!--            update_by AS `updateBy.id`,-->
+<!--            status-->
+<!--        FROM opbot_schedule-->
+<!--    </sql>-->
+
+<!--    <select id="findRunningSchedulesByApplyId" parameterType="long" resultType="Schedule">-->
+<!--        <include refid="selectSchedule"/>-->
+<!--        WHERE apply_id = #{applyId} and status = 4-->
+<!--    </select>-->
+
+<!--    <select id="selectSchedule" parameterType="com.jd.jimdb.model.model.OpbotSchedule" resultMap="OpbotScheduleResult">-->
+<!--        SELECT-->
+<!--        s.id,-->
+<!--        s.apply_id AS applyId,-->
+<!--        s.type,-->
+<!--        s.trigger_id AS triggerId,-->
+<!--        s.fire_time AS fireTime,-->
+<!--        s.success_count As successCount,-->
+<!--        s.fail_count As failCount,-->
+<!--        s.wait_count AS waitCount,-->
+<!--        s.create_time AS createTime,-->
+<!--        s.create_by AS createBy,-->
+<!--        s.update_time AS updateTime,-->
+<!--        s.update_by AS updateBy,-->
+<!--        s.status,-->
+<!--        a.business_id AS businessId,-->
+<!--        a.type AS applyType,-->
+<!--        a.payload,-->
+<!--        a.shardId,-->
+<!--        s.parent_id AS parentId-->
+<!--        FROM opbot_schedule s, opbot_apply a-->
+<!--        where s.apply_id = a.id-->
+<!--        <if test="(applyType != null and applyType !='')">-->
+<!--            and a.type like #{applyType}-->
+<!--        </if>-->
+<!--        <if test="(status!=null and status !=0 )">-->
+<!--            and s.status=#{status}-->
+<!--        </if>-->
+<!--        <if test="(businessId != null and businessId != '')">-->
+<!--            and a.business_id=#{businessId}-->
+<!--        </if>-->
+<!--        <if test="(applyId != null and applyId !='')">-->
+<!--            and s.apply_id =#{applyId}-->
+<!--        </if>-->
+<!--        <if test="(shardId !=null and shardId !='')">-->
+<!--            and a.shardId = #{shardId}-->
+<!--        </if>-->
+<!--        <choose>-->
+<!--            <when test="parent">-->
+<!--                and s.parent_id is null-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                and s.parent_id is not null-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+<!--        order by s.update_time desc-->
+<!--        limit #{startIndex}, #{pageSize}-->
+<!--    </select>-->
+
+<!--    <select id="totalCount"  parameterType="com.jd.jimdb.model.model.OpbotSchedule" resultType="int">-->
+<!--        SELECT  count(1)-->
+<!--        FROM opbot_schedule s, opbot_apply a-->
+<!--        where s.apply_id = a.id-->
+<!--        <if test="(applyType != null and applyType !='')">-->
+<!--            and a.type like #{applyType}-->
+<!--        </if>-->
+<!--        <if test="(status!=null and status !=0 )">-->
+<!--            and s.status=#{status}-->
+<!--        </if>-->
+<!--        <if test="(businessId != null and businessId != '')">-->
+<!--            and a.business_id=#{businessId}-->
+<!--        </if>-->
+<!--        <if test="(shardId !=null and shardId !='')">-->
+<!--            and a.shardId = #{shardId}-->
+<!--        </if>-->
+<!--        <if test="(applyId != null and applyId !='')">-->
+<!--            and s.apply_id =#{applyId}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--</mapper>-->

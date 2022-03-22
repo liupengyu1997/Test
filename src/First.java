@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class First {
@@ -45,6 +46,10 @@ public class First {
         platformList.add("CSDN");
         platformList.add("掘金");
 
+        for(String key:platformList){
+            System.out.println(key.getBytes());
+        }
+
 //        for (String platform : platformList) {
 //            if (platform.equals("博客园")) {
 //                platformList.remove(platform);
@@ -61,6 +66,7 @@ public class First {
 
         System.out.println(platformList);
         System.out.println("新增分支");
+
 
     }
 }
