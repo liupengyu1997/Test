@@ -60,7 +60,7 @@ public class First {
         }
 
         System.out.println(platformList);
-        System.out.println("新增分支");
+
 
     }
 }
