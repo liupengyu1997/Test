@@ -66,7 +66,6 @@ public class First {
 
         System.out.println(platformList);
         System.out.println("新增分支");
-        System.out.println("改了邮箱看是否github能提交");
 
 
     }
